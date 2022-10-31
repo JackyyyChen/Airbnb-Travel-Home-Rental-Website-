@@ -12,7 +12,7 @@
 
 ## 0. Change Log
 
-N/A
+* 30/10: Updated Typescript setup instructions
 
 ## 1. Background & Motivation
 
@@ -260,8 +260,11 @@ Tests must be run from inside the `frontend` folder by running `yarn test`.
 ### 2.9. Other notes
 * The port you can use to `fetch` data from the backend is defined in `frontend/src/config.json`
 * You can modify the eslint file throughout your work, but you need to revert it to the original for final submission to achieve the linting marks.
-* For users of typescript, there is an alternatively `.eslintrc` file [being collaborated here](https://hackmd.io/sy1urGgxRpGwOJ0nOkNlUw?both). Do not change it unless given approval on forum.
 * [This article may be useful to some students](https://stackoverflow.com/questions/66284286/react-jest-mock-usenavigate)
+* If you'd like to use Typescript, remove the frontend folder and instead run these commands in the main directory
+  * `npx create-react-app frontend --template typescript`
+  * `cd frontend`
+  * `npm i eslint-config-standard-with-typescript`
 
 ## 3. Getting Started
 
@@ -355,6 +358,7 @@ Your assignment will be hand-marked by tutor(s) in the course according to the c
 				<li>Features implemented that satisfy requirements as outlined in `2.1`, `2.2`, `2.3`, `2.4`, and `2.5` (for pairs).</li>
 				<li>Features implemented in a mobile responsive way that work on screens as small as 400px wide, 700px high</li>
 				<li>Responsive design will contribute up to one quarter of the marks of this section</li>
+				<li>You MUST update the progress.csv file in the root folder of this repository as you complete things partially or fully. The valid values are "NO", "PARTIAL", and "YES". Updating this is necessary so that your tutor knows what to focus on and what to avoid - giving them the best understanding of your work and provide you with marks you have earned.</li>
 			</ul>
 		</td>
 	</tr>
@@ -457,6 +461,12 @@ This will submit the latest commit on master as your submission.
 
 It is your responsibiltiy to ensure that your code can be successfully demonstrated on the CSE machines (e.g. vlab)
 from a fresh clone of your repository. Failure to ensure this may result in a loss of marks.
+
+### Dryrun
+
+You can run a dryrun to sanity check your code runs basically by:
+1. Pushing your code to master on gitlab
+2. On a CSE terminal (vlab or lab machine), run `6080 ass3dryrun GROUP_NAME` where GROUP_NAME is the name of your group
 
 ## 9. Late Submission Policy
 
