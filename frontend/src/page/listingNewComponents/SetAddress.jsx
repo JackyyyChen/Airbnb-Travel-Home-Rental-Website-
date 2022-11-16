@@ -25,7 +25,7 @@ export default function AddressForm () {
   }
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6">
         House address
       </Typography>
       <Grid container spacing={3}>

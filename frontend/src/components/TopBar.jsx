@@ -12,13 +12,26 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 // import MailIcon from '@mui/icons-material/Mail';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import BigButton from './bigButton';
+// import BigButton from './bigButton';
+import Button from '@mui/material/Button';
 // import LogOut from './LogOut'
 import fetchFunc from '../services/fetchRequest';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import HomeWorkOutlinedIcon from '@mui/icons-material/HomeWorkOutlined';
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import { makeStyles } from '@material-ui/core'
+
+const useStyles = makeStyles({
+  buttonStyle: {
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    padding: '0 30px',
+  },
+});
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -61,6 +74,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar (props) {
+  const styles = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -93,21 +107,22 @@ export default function PrimarySearchAppBar (props) {
   const { pathname } = useLocation();
   React.useEffect(() => {
     const thisToken = localStorage.getItem('token');
-    console.log('ThisToken', thisToken);
+    // console.log('ThisToken', thisToken);
     if (thisToken) {
       setToken(thisToken);
       token = thisToken;
     }
   }, [props.token])
-  console.log('Token', token);
-  console.log('props.token', props.token);
+  // console.log('Token', token);
+  // console.log('props.token', props.token);
   const logoutBtn = async () => {
     await fetchFunc('/user/auth/logout', 'POST')
     // const data = await response.json();
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setToken(null);
-    console.log('Token', token);
-    console.log('props.token', props.token);
+    // console.log('Token', token);
+    // console.log('props.token', props.token);
     // console.log(localStorage.getItem('token'));
   }
   React.useEffect(() => {
@@ -116,7 +131,7 @@ export default function PrimarySearchAppBar (props) {
         history.push('/Dashboard');
       }
     } else if (token === null) {
-      if (pathname === '/Dashboard' || pathname === '/currentListing' || pathname === '/listingNew') {
+      if (pathname === '/Dashboard' || pathname === '/MyListing' || pathname === '/listingNew' || pathname === '/AllListing' || pathname === '/Booking') {
         history.push('/login');
       }
     }
@@ -170,17 +185,24 @@ export default function PrimarySearchAppBar (props) {
       </MenuItem>
       {/* Current Listing */}
       <MenuItem>
-      <span><Link to="/currentListing" variant="body2">
+      <span><Link to="/MyListing" variant="body2">
         <IconButton size="large" aria-label="Notifications" color="inherit">
           <HomeWorkOutlinedIcon />
-        </IconButton>CurrentListing</Link></span>
+        </IconButton>MyListingPage</Link></span>
       </MenuItem>
       {/* Listing New */}
       <MenuItem>
       <span><Link to="/listingNew" variant="body2">
         <IconButton size="large" aria-label="Notifications" color="inherit">
-          <HomeWorkOutlinedIcon />
+          <NoteAddIcon />
         </IconButton>ListingNew</Link></span>
+      </MenuItem>
+      {/* All listing in publish */}
+      <MenuItem>
+      <span><Link to="/AllListing" variant="body2">
+        <IconButton size="large" aria-label="Notifications" color="inherit">
+          <TravelExploreIcon />
+        </IconButton>Published lists</Link></span>
       </MenuItem>
 
       <MenuItem onClick={handleProfileMenuOpen}>
@@ -208,7 +230,13 @@ export default function PrimarySearchAppBar (props) {
               </>
             )}
             {token && (
-              <BigButton onClick={logoutBtn}>Logout</BigButton>
+              // <BigButton onClick={logoutBtn}>Logout</BigButton>
+              <Button size='small'
+              color='secondary'
+              variant = 'contained'
+              onClick={logoutBtn}
+              className={styles.buttonStyle}
+              >Logout</Button>
             )}
           {/* <Typography
             variant="h6"
@@ -229,14 +257,27 @@ export default function PrimarySearchAppBar (props) {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" >
-              {/* <MailIcon /> */}
-              <DashboardOutlinedIcon />
-            </IconButton>
-            <IconButton>
-              {/* <NotificationsIcon /> */}
+            {/* ###################################### */}
+            <span><Link to="/Dashboard" variant="body2">
+            <IconButton size="large" aria-label="mail" color="inherit">
+                <DashboardOutlinedIcon />
+            </IconButton></Link></span>
+            <span><Link to="/MyListing" variant="body2">
+            {/* my listing */}
+            <IconButton size="large" aria-label="Notifications" color="inherit">
               <HomeWorkOutlinedIcon />
-            </IconButton>
+            </IconButton></Link></span>
+            {/* Listing new */}
+            <span><Link to="/listingNew" variant="body2">
+            <IconButton size="large" aria-label="Notifications" color="inherit">
+              <NoteAddIcon />
+            </IconButton></Link></span>
+            {/* All listing in publish */}
+            <span><Link to="/AllListing" variant="body2">
+              <IconButton size="large" aria-label="Notifications" color="inherit">
+                <TravelExploreIcon />
+              </IconButton></Link></span>
+            {/* ###################################### */}
             <IconButton
               size="large"
               edge="end"

@@ -49,6 +49,10 @@ export default function SignIn (props) {
     } else {
       props.setTokenFn(data.token);
       // console.log(data.token);
+      const userData = { token: data.token, email: info.get('email') }
+      console.log(userData);
+      console.log(userData.email);
+      localStorage.setItem('user', JSON.stringify(userData))
       localStorage.setItem('token', data.token);
     }
   };
@@ -82,7 +86,7 @@ export default function SignIn (props) {
               name="email"
               autoComplete="email"
               autoFocus
-              value='jacky@unsw'
+              // value='jacky@unsw'
             />
             <TextField
               margin="normal"
@@ -93,7 +97,7 @@ export default function SignIn (props) {
               type="password"
               id="password"
               autoComplete="current-password"
-              value='chen1178'
+              // value='chen1178'
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

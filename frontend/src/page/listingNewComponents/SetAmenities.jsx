@@ -21,35 +21,6 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(10),
     height: '100vh',
   },
-  paper: {
-    position: 'relative',
-    height: '80vh',
-    // paddingBottom: theme.spacing(5),
-  },
-  subtitle: {
-    marginBottom: theme.spacing(5),
-  },
-  formBox: {
-    paddingLeft: theme.spacing(5),
-    paddingRight: theme.spacing(5),
-    height: '50%',
-    overflow: 'auto',
-  },
-  buttonGroup: {
-    position: 'absolute',
-    bottom: theme.spacing(5),
-    right: theme.spacing(5),
-  },
-  nextButton: {
-    marginLeft: 5,
-  },
-
-  bedroomsList: {
-    paddingLeft: theme.spacing(3),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  listTitle: { width: 'auto' },
   choosedButton: {
     borderRadius: 5,
     // border: '2px black solid',
@@ -69,9 +40,7 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(5),
     width: theme.spacing(5),
   },
-  input: {
-    display: 'none',
-  },
+
 }))
 
 export default function SetAmenities () {

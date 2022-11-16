@@ -2,6 +2,7 @@ const REQUEST_URL = 'http://localhost:5005'
 
 const initData = {
   address: { street: '', city: '', state: '', postcode: '', country: '' },
+  title: '',
   price: '',
   thumbnail: '',
   metadata: {

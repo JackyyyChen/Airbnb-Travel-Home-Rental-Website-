@@ -11,6 +11,7 @@ import { initData } from '../../services/config'
 import { fileToDataUrl } from '../../services/sendImage';
 import fetchFunc from '../../services/fetchRequest'
 import errorPop from '../../components/errorPopup';
+import { useHistory } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SetAmenities () {
   const styles = useStyles()
+  const history = useHistory()
   const [Inputimage, setInputImage] = React.useState([])
   const handleInputFile = (e) => {
     setInputImage(e.target.files)
@@ -56,62 +58,44 @@ export default function SetAmenities () {
       return <Typography> Files are{UploadImage} </Typography>
     }
   })()
-  // Upload the image to fileToDataUrl
-  // const fileToDataUrlFn = (function () {
-  //   if (Inputimage.length !== 0) {
-  //     let thumbnailStr = ''
-  //     for (let i = 0; i < Inputimage.length; i++) {
-  //       fileToDataUrl(Inputimage[i]).then((res) => {
-  //         thumbnailStr += `${res} `
-  //         if (i === Inputimage.length - 1) {
-  //           const data = { ...initData }
-  //           data.thumbnail = thumbnailStr
-  //           console.log(data);
-  //           // fetchFunc('/listings/new', 'POST', data)
-  //           //   .then((response) => {
-  //           //     if (response.status !== 200) {
-  //           //       // alert('not succeed');
-  //           //       const errorMessageInput = 'invalid submit!';
-  //           //       errorPop(errorMessageInput);
-  //           //     }
-  //           //     const errorMessageInput = 'create new list succeded!';
-  //           //     errorPop(errorMessageInput);
-  //           //   })
-  //           //   .catch((err) => {
-  //           //     console.log(err)
-  //           //     const errorMessageInput = 'error exist';
-  //           //     errorPop(errorMessageInput);
-  //           //   })
-  //         }
-  //       })
-  //     }
-  //   }
-  // })()
+  // check all information correct
+  const checkValidation = (info) => {
+    console.log(info)
+    if (info.thumbnail === '') {
+      const errorMessageInput = 'Please upload at least one image';
+      errorPop(errorMessageInput);
+      return false
+    }
+    return true
+  }
   // make a submit
-  const handleSubmit = () => {
-    let thumbnailStr = ''
+  const MakeSubmition = () => {
+    const data = { ...initData }
+    let ExistThumbnail = ''
     for (let i = 0; i < Inputimage.length; i++) {
       fileToDataUrl(Inputimage[i]).then((res) => {
-        thumbnailStr += `${res} `
+        ExistThumbnail += `${res} `
         if (i === Inputimage.length - 1) {
-          const data = { ...initData }
-          data.thumbnail = thumbnailStr
+          data.thumbnail = ExistThumbnail
           console.log('+++', data);
-          fetchFunc('/listings/new', 'POST', data)
-            .then((response) => {
-              if (response.status !== 200) {
-                // alert('not succeed');
-                const errorMessageInput = 'invalid submit!';
+          if (checkValidation(data)) {
+            fetchFunc('/listings/new', 'POST', data)
+              .then((response) => {
+                if (response.status !== 200) {
+                  // alert('not succeed');
+                  const errorMessageInput = 'invalid submit!';
+                  errorPop(errorMessageInput);
+                }
+                const errorMessageInput = 'create new list succeded!';
                 errorPop(errorMessageInput);
-              }
-              const errorMessageInput = 'create new list succeded!';
-              errorPop(errorMessageInput);
-            })
-            .catch((err) => {
-              console.log(err)
-              const errorMessageInput = 'error exist';
-              errorPop(errorMessageInput);
-            })
+                history.push('/MyListing')
+              })
+              .catch((err) => {
+                console.log(err)
+                const errorMessageInput = 'error exist';
+                errorPop(errorMessageInput);
+              })
+          }
         }
       })
     }
@@ -151,7 +135,7 @@ export default function SetAmenities () {
             <Button variant='contained'
                     color='primary'
                     component='span'
-                    onClick={handleSubmit}>Submit</Button>
+                    onClick={MakeSubmition}>Submit</Button>
           </Box>
         </Grid>
       </Grid>

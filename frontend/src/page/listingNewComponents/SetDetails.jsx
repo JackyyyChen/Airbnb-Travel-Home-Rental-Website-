@@ -12,7 +12,7 @@ export default function PaymentForm () {
   const [dataState, setdataState] = React.useState(initData)
   const handleChangeRooms = (e) => {
     const newData = { ...dataState }
-    console.log(initData.metadata.bathRoomNumber)
+    console.log(initData.title)
     if (e.target.name === 'title') {
       initData.title = e.target.value
       // console.log(initData.title)

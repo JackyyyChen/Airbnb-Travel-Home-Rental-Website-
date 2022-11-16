@@ -10,25 +10,24 @@ import errorPop from '../../components/errorPopup';
 // import TextField from '@mui/material/TextField';
 // import FormControlLabel from '@mui/material/FormControlLabel';
 // import Checkbox from '@mui/material/Checkbox';
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
-    paddingTop: theme.spacing(10),
+    // paddingTop: theme.spacing(10),
     height: '100vh',
   },
 
   listTitle: { width: 'auto' },
   choosedButton: {
-    borderRadius: 5,
+    borderRadius: 10,
     // border: '2px black solid',
-    padding: theme.spacing(2),
+    // padding: theme.spacing(2),
     textAlign: 'center',
-    // color: '#3f51b5',
-    border: '2px solid #3f51b5',
+    border: '3px solid #3f51b5',
   },
   unChoosedButton: {
-    borderRadius: 5,
+    borderRadius: 10,
     // border: '2px black solid',
-    padding: theme.spacing(2),
+    // padding: theme.spacing(2),
     textAlign: 'center',
     border: '2px solid #b5b5b5',
   },
@@ -82,7 +81,7 @@ export default function AddressForm () {
                 }
                 onClick={handlePropertyType}
               >
-                <Typography>An entire place</Typography>
+              <Typography>An entire place</Typography>
               </Button>
             </Grid>
             <Grid item xs={12}>

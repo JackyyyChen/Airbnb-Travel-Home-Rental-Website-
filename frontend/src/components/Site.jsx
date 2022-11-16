@@ -4,8 +4,13 @@ import React from 'react';
 import Dashboard from '../page/Dashboard';
 import Login from '../page/Login';
 import Register from '../page/Register';
-import CurrentListing from '../page/CurrentListing';
+import MyListing from '../page/MyListing';
 import ListingNew from '../page/ListingNew';
+import Edit from '../page/Edit';
+import Booking from '../page/Booking';
+import CheckBooking from '../page/CheckBooking'
+import Publish from '../page/publishList'
+import AllListing from '../page/AllListing';
 // import fetchFunc from '../services/fetchRequest';
 // import BigButton from './bigButton';
 import TopBar from './TopBar';
@@ -22,37 +27,17 @@ import {
 
 function Site () {
   const [token, setToken] = React.useState(null);
-  // const history = useHistory();
-  // const { pathname } = useLocation();
-  // console.log(location);
-  // console.log(localStorage.getItem('token'));
+  // const [currentUser, setCurrentUser] = React.useState(
+  //   localStorage.getItem('user')
+  // )
+  // const currentUser = JSON.parse(localStorage.getItem('user'))
+  // console.log(currentUser.email)
   React.useEffect(() => {
     const thisToken = localStorage.getItem('token');
     if (thisToken) {
       setToken(thisToken);
     }
   }, [])
-
-  console.log('+++', token);
-  // React.useEffect(() => {
-  //   if (token !== null) {
-  //     if (pathname === '/login' || pathname === '/register') {
-  //       history.push('/Dashboard');
-  //     }
-  //   } else if (token === null) {
-  //     if (pathname === '/Dashboard' || pathname === '/currentListing' || pathname === '/listingNew') {
-  //       history.push('/login');
-  //     }
-  //   }
-  // }, [token]);
-
-  // const logoutBtn = async () => {
-  //   const response = await fetchFunc('/user/auth/logout', 'POST')
-  //   const data = await response.json();
-  //   localStorage.removeItem('token');
-  //   setToken(null);
-  //   console.log(data.token);
-  // }
 
   return (
     <div>
@@ -63,20 +48,45 @@ function Site () {
       <br/>
 
       <Switch>
+        {/* LOGIN */}
         <Route path="/login">
           <Login setTokenFn={setToken} />
         </Route>
+        {/* REGISTER */}
         <Route path="/register">
           <Register setTokenFn={setToken} />
         </Route>
+        {/* DASHBOARD */}
         <Route path="/Dashboard">
           <Dashboard token={token} />
         </Route>
-        <Route path="/currentListing">
-          <CurrentListing token={token}/>
+        {/* MYLISTING */}
+        <Route path="/MyListing">
+          <MyListing />
         </Route>
+        {/* LISTING NEW LSIT */}
         <Route path="/listingNew">
           <ListingNew token={token}/>
+        </Route>
+        {/* EDIT PAGE */}
+        <Route path="/Edit/:id">
+          <Edit />
+        </Route>
+        {/* ALL LISTING PAGE */}
+        <Route path="/AllListing">
+          <AllListing />
+        </Route>
+        {/* CHECK BOOKING PAGE */}
+        <Route path="/CheckBooking/:listID">
+          <CheckBooking />
+        </Route>
+        {/* PUBLISH LIST PAGE */}
+        <Route path="/publishLish/:listID">
+          <Publish />
+        </Route>
+        {/* Booking PAGE */}
+        <Route path="/Booking/:id">
+          <Booking />
         </Route>
         <Route path="/">
           <b>Welcome</b>

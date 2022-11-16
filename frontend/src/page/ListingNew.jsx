@@ -1,5 +1,5 @@
 import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
+// import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 // import Link from '@mui/material/Link';
 import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ChooseType from './listingNewComponents/ChooseType';
 import SetAddress from './listingNewComponents/SetAddress';
 import SetDetails from './listingNewComponents/SetDetails';
@@ -53,7 +53,7 @@ function getStepContent (step) {
   }
 }
 
-const theme = createTheme();
+// const theme = createTheme();
 
 export default function Checkout () {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -150,30 +150,9 @@ export default function Checkout () {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  // const handleSubmit = () => {
-  //   // if (activeStep === steps.length) {
-  //   console.log('I am here')
-  //   console.log('+++', initData.thumbnail)
-  //   fetchFunc('/listings/new', 'POST', initData)
-  //     .then((response) => {
-  //       if (response.status !== 200) {
-  //         // alert('not succeed');
-  //         const errorMessageInput = 'invalid submit!';
-  //         errorPop(errorMessageInput);
-  //       }
-  //       const errorMessageInput = 'create new list succeded!';
-  //       errorPop(errorMessageInput);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //       const errorMessageInput = 'error exist';
-  //       errorPop(errorMessageInput);
-  //     })
-  // }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <React.Fragment>
       <AppBar
         position="absolute"
         color="default"
@@ -240,6 +219,6 @@ export default function Checkout () {
         </Paper>
         <Copyright />
       </Container>
-    </ThemeProvider>
+    </React.Fragment>
   );
 }
