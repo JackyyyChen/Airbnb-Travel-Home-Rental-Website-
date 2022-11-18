@@ -1,7 +1,7 @@
-import { REQUEST_URL } from './config'
+import { REQUEST } from './config'
 
 function fetchFunc (url, method, data = null) {
-  const URL = REQUEST_URL + url
+  const URL = REQUEST + url
   const option = {
     method: method,
     headers: {

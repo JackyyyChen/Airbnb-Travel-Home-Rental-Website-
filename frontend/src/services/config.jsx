@@ -1,4 +1,4 @@
-const REQUEST_URL = 'http://localhost:5005'
+const REQUEST = 'http://localhost:5005'
 
 const initData = {
   address: { street: '', city: '', state: '', postcode: '', country: '' },
@@ -23,4 +23,4 @@ const initData = {
   },
 }
 
-export { REQUEST_URL, initData }
+export { REQUEST, initData }
