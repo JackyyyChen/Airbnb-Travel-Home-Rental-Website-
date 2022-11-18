@@ -8,7 +8,7 @@ import InputBase from '@mui/material/InputBase';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+// import AccountCircle from '@mui/icons-material/AccountCircle';
 // import MailIcon from '@mui/icons-material/Mail';
 // import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 // import LogOut from './LogOut'
 import fetchFunc from '../services/fetchRequest';
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+// import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import HomeWorkOutlinedIcon from '@mui/icons-material/HomeWorkOutlined';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import { makeStyles } from '@material-ui/core'
@@ -81,9 +81,9 @@ export default function PrimarySearchAppBar (props) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleProfileMenuOpen = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -128,10 +128,13 @@ export default function PrimarySearchAppBar (props) {
   React.useEffect(() => {
     if (token !== null) {
       if (pathname === '/login' || pathname === '/register') {
-        history.push('/Dashboard');
+        history.push('/AllListing');
       }
     } else if (token === null) {
-      if (pathname === '/Dashboard' || pathname === '/MyListing' || pathname === '/listingNew' || pathname === '/AllListing' || pathname === '/Booking') {
+      // if (pathname === '/Dashboard' || pathname === '/MyListing' || pathname === '/listingNew' || pathname === '/AllListing' || pathname === '/Booking' || pathname === '/CheckBooking') {
+      //   history.push('/login');
+      // }
+      if (pathname !== '/login') {
         history.push('/login');
       }
     }
@@ -177,12 +180,12 @@ export default function PrimarySearchAppBar (props) {
       onClose={handleMobileMenuClose}
     >
       {/* Dashboard */}
-      <MenuItem>
+      {/* <MenuItem>
       <span><Link to="/Dashboard" variant="body2">
         <IconButton size="large" aria-label="mail" color="inherit">
             <DashboardOutlinedIcon />
         </IconButton>Dashboard</Link></span>
-      </MenuItem>
+      </MenuItem> */}
       {/* Current Listing */}
       <MenuItem>
       <span><Link to="/MyListing" variant="body2">
@@ -205,7 +208,7 @@ export default function PrimarySearchAppBar (props) {
         </IconButton>Published lists</Link></span>
       </MenuItem>
 
-      <MenuItem onClick={handleProfileMenuOpen}>
+      {/* <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -216,7 +219,7 @@ export default function PrimarySearchAppBar (props) {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
-      </MenuItem>
+      </MenuItem> */}
     </Menu>
   );
 
@@ -258,10 +261,10 @@ export default function PrimarySearchAppBar (props) {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             {/* ###################################### */}
-            <span><Link to="/Dashboard" variant="body2">
+            {/* <span><Link to="/Dashboard" variant="body2">
             <IconButton size="large" aria-label="mail" color="inherit">
                 <DashboardOutlinedIcon />
-            </IconButton></Link></span>
+            </IconButton></Link></span> */}
             <span><Link to="/MyListing" variant="body2">
             {/* my listing */}
             <IconButton size="large" aria-label="Notifications" color="inherit">
@@ -278,7 +281,7 @@ export default function PrimarySearchAppBar (props) {
                 <TravelExploreIcon />
               </IconButton></Link></span>
             {/* ###################################### */}
-            <IconButton
+            {/* <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -288,7 +291,7 @@ export default function PrimarySearchAppBar (props) {
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
+            </IconButton> */}
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton

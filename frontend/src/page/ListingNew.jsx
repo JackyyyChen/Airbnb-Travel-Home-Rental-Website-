@@ -10,7 +10,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 // import Link from '@mui/material/Link';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 // import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ChooseType from './listingNewComponents/ChooseType';
@@ -22,17 +22,6 @@ import { initData } from '../services/config'
 import ErrorPopup from '../components/errorPopupWindow';
 import errorPop from '../components/errorPopup';
 // import fetchFunc from '../services/fetchRequest'
-
-function Copyright () {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link to="/login" variant="body2">myWebsite</Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const steps = ['Choose type', 'House address', 'House details', 'House amentities', 'Upload photo'];
 
@@ -163,8 +152,8 @@ export default function Checkout () {
         }}
       >
         <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
+          <Typography variant="h6" color="purple" noWrap>
+            AirBrB
           </Typography>
         </Toolbar>
       </AppBar>
@@ -210,14 +199,10 @@ export default function Checkout () {
                   onClick={handleNext}
                   sx={{ mt: 3, ml: 1 }}
                 >Next</Button>)}
-
-                {activeStep === steps.length - 1 && (<Link to="/Dashboard" variant="body2">Go to Dashboard</Link>)}
-
               </Box>
             </React.Fragment>
           )}
         </Paper>
-        <Copyright />
       </Container>
     </React.Fragment>
   );

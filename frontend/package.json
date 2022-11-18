@@ -10,7 +10,7 @@
     "@material-ui/icons": "^4.11.3",
     "@material-ui/pickers": "^3.3.10",
     "@mui/icons-material": "^5.10.9",
-    "@mui/material": "^5.10.12",
+    "@mui/material": "^5.10.14",
     "@mui/x-date-pickers-pro": "^5.0.8",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^13.5.0",

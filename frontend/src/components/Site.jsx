@@ -1,7 +1,7 @@
 import React from 'react';
 // import Register from '../page/Register_delete';
 // import Login from '../page/Login_delete';
-import Dashboard from '../page/Dashboard';
+// import Dashboard from '../page/Dashboard';
 import Login from '../page/Login';
 import Register from '../page/Register';
 import MyListing from '../page/MyListing';
@@ -57,9 +57,9 @@ function Site () {
           <Register setTokenFn={setToken} />
         </Route>
         {/* DASHBOARD */}
-        <Route path="/Dashboard">
+        {/* <Route path="/Dashboard">
           <Dashboard token={token} />
-        </Route>
+        </Route> */}
         {/* MYLISTING */}
         <Route path="/MyListing">
           <MyListing />

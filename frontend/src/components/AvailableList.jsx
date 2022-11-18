@@ -17,7 +17,7 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types'
-import { makeStyles, ImageList, ImageListItem } from '@material-ui/core'
+import { makeStyles, ImageList, ImageListItem, Modal } from '@material-ui/core'
 import HotelIcon from '@material-ui/icons/Hotel'
 import BathtubIcon from '@material-ui/icons/Bathtub'
 import PoolRoundedIcon from '@mui/icons-material/PoolRounded';
@@ -75,6 +75,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+function getModalStyle () {
+  return {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  }
+}
+
 // const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const getAllImage = (thumbnail) => {
   const allIMage = thumbnail.split(' ')
@@ -109,15 +123,47 @@ const theme = createTheme();
 
 export default function AvailableList (props) {
   const lists = props.lists
+  const bookInfo = props.bookInfo
+  console.log('AvaList', bookInfo)
+  const [openCommenteModal, setOpenCommentModal] = React.useState(false)
+  const [modalStyle] = React.useState(getModalStyle)
+  const [commentTitle, setCommentTitle] = React.useState('')
   // const setFetchData = props.setFetchData
+  // const currentUser = JSON.parse(localStorage.getItem('user'))
   const styles = useStyles()
   const history = useHistory()
+  console.log(commentTitle)
+  // Open comment window
+  const OpenCommentWindow = (e) => {
+    // const targetID = { id: e.currentTarget.name }
+    setCommentTitle(e.currentTarget.name)
+    setOpenCommentModal(true)
+  }
+  // Close delete window
+  const CloseCommentWindow = (e) => {
+    setOpenCommentModal(false)
+  }
 
   // go to booking page
   const GoToBooking = (e) => {
     console.log('gotoedit');
     console.log(e.currentTarget.name);
     history.push(`/Booking/${e.currentTarget.name}`)
+  }
+  // const [comment, setComment] = React.useState('')
+  console.log(lists)
+  const temp = []
+  for (let i = 0; i < lists.length; i++) {
+    let comment = { title: '', reviews: '' }
+    comment = { title: lists[i].title, reviews: lists[i].reviews }
+    temp.push(comment)
+  }
+  console.log(temp)
+
+  for (let i = 0; i < temp.length; i++) {
+    if (temp[i].title === commentTitle) {
+      console.log('yes')
+    }
   }
 
   return (
@@ -307,7 +353,14 @@ export default function AvailableList (props) {
                       >
                       Booking
                       </Button>)}
-                      <Button>View Comments</Button>
+                      {/* see comment */}
+                      <Button
+                      size="small"
+                      name={card.title}
+                      onClick={OpenCommentWindow}
+                      >
+                      View Comments
+                      </Button>
                     </ButtonGroup>
                     </Grid>
                   </CardActions>
@@ -317,6 +370,48 @@ export default function AvailableList (props) {
           </Grid>)}
         </Container>
       </main>
+      {/* comment modal */}
+      <Modal
+        open={openCommenteModal}
+        onClose={CloseCommentWindow}
+        aria-labelledby='simple-modal-title'
+        aria-describedby='simple-modal-description'
+      >
+        <div style={modalStyle} className={styles.paper}>
+          {/* <h3>Do you want to delete this list?</h3> */}
+          {/* price */}
+          {temp.map((card) => (
+            <Grid item key={card.title} xs={12} sm={6} md={4}>
+              {card.title === commentTitle && card.reviews.length !== 0 && (
+              <Typography
+                  variant='body2'
+                  color='textPrimary'
+                  align='center'
+                >
+                  <span className={styles.boldFont}>Comment:</span>
+                  {` ${card.reviews}`}
+              </Typography>
+              )}
+              {card.title === commentTitle && card.reviews.length === 0 && (
+              <Typography
+                  variant='body2'
+                  color='textPrimary'
+                  align='center'
+                >
+                <span className={styles.boldFont}>This list has no comment</span>
+              </Typography>
+              )}
+            </Grid>
+          ))}
+          <Button
+            size='large'
+            color='secondary'
+            onClick={CloseCommentWindow}
+          >
+            Return
+          </Button>
+        </div>
+      </Modal>
       {/* Footer */}
       <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
         <Typography variant="h6" align="center" gutterBottom>
@@ -328,7 +423,7 @@ export default function AvailableList (props) {
           color="text.secondary"
           component="p"
         >
-          Something here to give the footer a purpose!
+          Have a good travel!
         </Typography>
         <Copyright />
       </Box>
@@ -340,4 +435,5 @@ export default function AvailableList (props) {
 AvailableList.propTypes = {
   lists: PropTypes.any,
   setFetchData: PropTypes.any,
+  bookInfo: PropTypes.any,
 }

@@ -3,11 +3,6 @@ import Avatar from '@mui/material/Avatar';
 // import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useHistory, useLocation } from 'react-router'
-// import TextField from '@mui/material/TextField';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// import Link from '@mui/material/Link';
-// import Grid from '@mui/material/Grid';
 import fetchFunc from '../services/fetchRequest'
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,7 +11,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { makeStyles, FormControl, FormControlLabel, Radio, RadioGroup, TextField, Checkbox } from '@material-ui/core'
 import Grid from '@mui/material/Grid';
-// import Button from '@material-ui/core/Button'
 import ErrorPopup from '../components/errorPopupWindow';
 import errorPop from '../components/errorPopup';
 import { purple } from '@material-ui/core/colors';
@@ -25,22 +19,16 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import { fileToDataUrl } from '../services/sendImage';
 import Button from '@material-ui/core/Button'
 
-const useStyles = makeStyles(() => ({
-  container: {
-    height: '100%',
-    width: '100%',
+const useStyles = makeStyles((theme) => ({
+  gridContainer: {
+    marginBottom: theme.spacing(3),
   },
-  listTitle: { width: 'auto' },
   radioStyle: {
     color: purple[800], '&.Mui-checked': { color: purple[600] }
   },
   boldFont: {
     fontWeight: 'bold',
   },
-  redText: {
-    color: 'red',
-  }
-
 }))
 
 function Copyright (props) {
@@ -62,10 +50,9 @@ export default function Edit () {
   const listID = location.pathname.split('/')[2]
   const [updateData, setUpdateData] = React.useState(null)
   const [propertyType, setPropertyType] = React.useState(null)
-  const [thumbnailType, setThumbnailType] = React.useState('image')
-  const [Inputimage, setInputImage] = React.useState([])
+  const [inputImage, setInputImage] = React.useState([])
 
-  console.log(propertyType, thumbnailType)
+  // console.log(propertyType, thumbnailType)
   console.log('currentData', updateData)
   React.useEffect(() => {
     fetchFunc(`/listings/${listID}`, 'GET').then((response) => {
@@ -110,7 +97,6 @@ export default function Edit () {
         if (newData.metadata.pet === true) {
           newData.metadata.pet = false
         }
-        setThumbnailType('image')
         setUpdateData(newData)
         // setInputImage(newData.thumbnail)
       })
@@ -195,18 +181,47 @@ export default function Edit () {
     setInputImage(e.target.files)
   }
   // Upload the image
+  // const filesContent = (function () {
+  //   if (inputImage.length !== 0) {
+  //     console.log('accept image');
+  //     let UploadImage = ''
+  //     for (let i = 0; i < inputImage.length; i++) {
+  //       UploadImage += ` ${inputImage[i].name}`
+  //     }
+  //     return <Typography gutterBottom> Files are{UploadImage} </Typography>
+  //   }
+  // })()
+  // const imgName = []
+  // Display input img file
+  const UploadImage = []
   const filesContent = (function () {
-    if (Inputimage.length !== 0) {
-      console.log('accept image');
-      let UploadImage = ''
-      for (let i = 0; i < Inputimage.length; i++) {
-        UploadImage += ` ${Inputimage[i].name}`
-      }
-      return <Typography> Files are{UploadImage} </Typography>
+    // console.log('passed');
+    for (let i = 0; i < inputImage.length; i++) {
+      UploadImage.push(inputImage[i].name)
     }
+    return <Grid container>
+    {UploadImage.length !== 0 && (
+    <Grid container spacing={1}>
+      {UploadImage.map((card) => (
+        <Grid item key={card}>
+          <Typography
+            variant='body3'
+            color='textPrimary'
+            align='center'
+          >
+            <span className={styles.boldFont}>File Name:</span>
+            {` ${card}`}
+          </Typography>
+        </Grid>
+      ))}
+    </Grid>
+    )}
+    </Grid>
   })()
+  console.log('name', UploadImage)
   // check all information correct
   const checkAllInformation = (info) => {
+    // console.log(info)
     if (info.metadata.BBQ === false &&
         info.metadata.TV === false &&
         info.metadata.airCondition === false &&
@@ -215,8 +230,9 @@ export default function Edit () {
         info.metadata.pet === false &&
         info.metadata.pool === false &&
         info.metadata.wifi === false) {
-      const errorMessageInput = 'Please choose one amentity';
-      errorPop(errorMessageInput);
+      // const errorMessageInput = 'Please choose one amentity';
+      // errorPop(errorMessageInput);
+      alert('Please choose one amentity')
       return false
     }
     return true
@@ -231,13 +247,17 @@ export default function Edit () {
     const data = { ...updateData }
     if (checkAllInformation(data)) {
       let ExistThumbnail = ''
-      for (let i = 0; i < Inputimage.length; i++) {
-        console.log('###', Inputimage);
-        fileToDataUrl(Inputimage[i]).then((res) => {
-          ExistThumbnail += `${res} `
-          if (i === Inputimage.length - 1) {
+      if (inputImage.length === 0) {
+        alert('Please choose one photo')
+      }
+      for (let i = 0; i < inputImage.length; i++) {
+        console.log('###', inputImage);
+        fileToDataUrl(inputImage[i]).then((response) => {
+          ExistThumbnail += `${response} `
+          if (i === inputImage.length - 1) {
             data.thumbnail = ExistThumbnail
             console.log('accept image');
+            console.log('submitData', data);
             fetchFunc(`/listings/${listID}`, 'PUT', data)
               .then((response) => {
                 if (response.status !== 200) {
@@ -302,7 +322,7 @@ export default function Edit () {
         <Typography variant="h6" align='center'>
             <span className={styles.boldFont}>Edit address</span>
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} className={styles.gridContainer}>
         <Grid item xs={12} sm={6}>
           <Typography variant='h6'>Street:</Typography>
           <TextField
@@ -469,29 +489,31 @@ export default function Edit () {
         </Grid>
         </Grid>
         {/* Edit amemtities */}
-            <Typography variant="h6" align='center'>
-                <span className={styles.boldFont}>Edit amemtities</span>
-            </Typography>
-            <Typography variant="h8" >
-                <div className={styles.boldFont}>You need to choice at least one</div>
-            </Typography>
-            <FormControl component='fieldset'>
-                <FormControlLabel name="pool" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Swimming pool" />
-                <FormControlLabel name="BBQ" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="BBQ" />
-                <FormControlLabel name="parking" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Parking" />
-                <FormControlLabel name="airCondition" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Air Condition" />
-                <FormControlLabel name="wifi" control={ <Checkbox className={styles.radioStyle} onChange={EditAmen}/> } label="WIFI" />
-                <FormControlLabel name="TV" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="TV" />
-                <FormControlLabel name="kitchen" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Kitch" />
-                <FormControlLabel name="pet" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Pet allow" />
+        <Typography variant="h6" align='center'>
+            <span className={styles.boldFont}>Edit amemtities</span>
+        </Typography>
+        <Typography variant="h8" color='red'>
+            <div className={styles.boldFont}>You need to choice at least one</div>
+        </Typography>
+        <FormControl component='fieldset'>
+            <FormControlLabel name="pool" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Swimming pool" />
+            <FormControlLabel name="BBQ" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="BBQ" />
+            <FormControlLabel name="parking" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Parking" />
+            <FormControlLabel name="airCondition" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Air Condition" />
+            <FormControlLabel name="wifi" control={ <Checkbox className={styles.radioStyle} onChange={EditAmen}/> } label="WIFI" />
+            <FormControlLabel name="TV" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="TV" />
+            <FormControlLabel name="kitchen" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Kitch" />
+            <FormControlLabel name="pet" control={<Checkbox className={styles.radioStyle} onChange={EditAmen}/>} label="Pet allow" />
         </FormControl>
         {/* Edit image */}
         <Typography variant="h6" gutterBottom>
         Upload photos
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} >
         <Grid item xs={12} align='center'>
-          <Typography>Thumbnail</Typography>
+          <Typography variant="h6" align='center'>
+            <span className={styles.boldFont}>Thumbnail</span>
+          </Typography>
           <Box>
             <input
               accept='image/jpeg,image/png,image/jpg'
@@ -504,24 +526,27 @@ export default function Edit () {
             <Typography className={styles.uploadTitle}>
               Upload a image (jpeg, png, jpg)
             </Typography>
-            {Inputimage.length === 0 && (<Typography> No file </Typography>)}
-            {Inputimage.length !== 0 && filesContent }
-            <Button variant='contained'
-                    color='secondary'
-                    component='span'
-                    onClick={MakeSubmition}>Submit</Button>
-          </Box>
-          <Box component="form" onSubmit={GoBackToListing} noValidate sx={{ mt: 1 }}>
+            {inputImage.length === 0 && (<Typography gutterBottom> No file </Typography>)}
+            {inputImage.length !== 0 && filesContent }
             <Button
-              type="submit"
-              fullWidth
-              color='primary'
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+            // variant='contained'
+            color='secondary'
+            component='span'
+            onClick={MakeSubmition}
             >
-              Back to listing
+            Submit
             </Button>
           </Box>
+            <Button
+            type="submit"
+            fullWidth
+            color='primary'
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={GoBackToListing}
+            >
+              Back to listing
+          </Button>
         </Grid>
       </Grid>
       <ErrorPopup></ErrorPopup>

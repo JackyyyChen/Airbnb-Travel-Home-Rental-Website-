@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 import ErrorPopup from '../components/errorPopupWindow';
 import errorPop from '../components/errorPopup';
 import AvailableList from '../components/AvailableList'
+import MyBookingList from '../components/MyBookingList'
 
 // inital global part
 
@@ -15,7 +16,6 @@ import AvailableList from '../components/AvailableList'
 //     paddingTop: theme.spacing(10)
 //   }
 // }));
-
 function AllListing () {
   // const styles = useStyle();
   //  const id = useParms()
@@ -81,30 +81,22 @@ function AllListing () {
         const list = data.bookings
         for (let i = 0; i < list.length; i++) {
           if (currentUser.email === list[i].owner) {
-            console.log(list[i].owner)
+            // console.log(list[i].owner)
             bookingList.push(list[i])
           }
         }
-        console.log(bookingList)
         setBookingInfo(bookingList)
       })
     })
   }, [fetchData])
-  console.log('haha', bookingInfo)
-  console.log('11', listings)
-  // for (let i = 0; i <= bookingInfo.length; i++) {
-  //   for (let j = 0; i <= listings.length; j++) {
-  //     if (listings.id === bookingInfo.owner) {
-  //       // console.log('yes')
-  //     }
-  //   }
-  // }
+  // console.log('bookInfo', bookingInfo)
 
   return (
     <React.Fragment>
       <Container >
         <ErrorPopup></ErrorPopup>
-        <AvailableList lists = {listings} setFetchData={setFetchData}></AvailableList>
+        <MyBookingList lists = {bookingInfo} setFetchData={setFetchData}></MyBookingList>
+        <AvailableList lists = {listings} bookInfo = {bookingInfo} setFetchData={setFetchData}></AvailableList>
       </Container>
     </React.Fragment>
   );

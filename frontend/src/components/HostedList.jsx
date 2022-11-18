@@ -52,8 +52,8 @@ function Copyright () {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit">
+        AirBrB
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -511,7 +511,7 @@ export default function HostedLists (props) {
           color="text.secondary"
           component="p"
         >
-          Something here to give the footer a purpose!
+          Have a good travel!
         </Typography>
         <Copyright />
       </Box>

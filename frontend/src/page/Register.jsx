@@ -58,7 +58,11 @@ export default function SignUp (props) {
         errorPop(data.error);
       } else {
         props.setTokenFn(data.token);
+        const userData = { token: data.token, email: info.get('email') }
+        console.log(userData);
+        console.log(userData.email);
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(userData))
       }
     }
   };

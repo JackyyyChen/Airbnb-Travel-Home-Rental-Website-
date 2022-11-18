@@ -10,7 +10,7 @@ import RoomServiceIcon from '@mui/icons-material/RoomService';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useLocation } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import fetchFunc from '../services/fetchRequest'
 // import Context from '@mui/base/TabsUnstyled/TabsContext';
 import ErrorPopup from '../components/errorPopupWindow';
@@ -28,8 +28,8 @@ function Copyright (props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit">
+        AirBrB.com
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -78,6 +78,7 @@ export default function Booking () {
   const [endTime, setEndTime] = React.useState(null)
   const [timeRanges, setTimeRanges] = React.useState([])
   const currentUser = JSON.parse(localStorage.getItem('user'))
+  const history = useHistory()
   console.log(currentUser)
   const handleStartTimeChange = (data) => {
     setStartTime(data)
@@ -87,7 +88,10 @@ export default function Booking () {
   }
   console.log(startTime, endTime)
   console.log('timeRange', timeRanges)
-
+  // go back to listing
+  const GoBackToListing = () => {
+    history.push('/AllListing')
+  };
   // get the details of this list
   React.useEffect(() => {
     fetchFunc(`/listings/${listID}`, 'GET').then(response => {
@@ -145,6 +149,10 @@ export default function Booking () {
 
   // submit booking
   const submitBooking = () => {
+    if (currentUser.email === lists[0].owner) {
+      alert('You can not book your owner list')
+      return false
+    }
     // console.log(startTime, endTime)
     const dateRange = { start: startTime, end: endTime }
     const timeGap = endTime - startTime
@@ -232,13 +240,25 @@ export default function Booking () {
                         {card.metadata.privateRoom && (' Private room')}
                         {card.metadata.shareRoom && (' Share room')}
                     </Typography>
-                    <Typography><span className={styles.boldFont}>Available date:</span></Typography>
+                    <Typography
+                    variant='body2'
+                    color='textPrimary'
+                    align='center'
+                    gutterBottom
+                    >
+                    <span className={styles.boldFont}>Available date:</span>
+                    </Typography>
                     {card.availability.length === 0 && (<h4>No availability time</h4>)}
                     {card.availability.length !== 0 && (
                     <React.Fragment>
                       {card.availability.map((ele) => {
                         return (
-                      <Typography key={ele.start}>
+                      <Typography
+                      variant='body3'
+                      color='red'
+                      align='center'
+                      gutterBottom
+                      key={ele.start}>
                       <span >From</span>
                       {` ${ChangeTimeToDate(ele.start)} `}
                       <span >To</span>
@@ -253,8 +273,8 @@ export default function Booking () {
               {/* booking part */}
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Grid container>
-        <Typography component="h1" variant="h5" gutterBottom>
-            Selet a time range for booking
+        <Typography component="h1" variant="h6" gutterBottom>
+          <span>Tips: Set the time in this oreder(MM/DD/YYYY)</span>
         </Typography>
         {/* start day */}
          <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -318,12 +338,23 @@ export default function Booking () {
           </Grid>
         </Grid>
             <Button
-              fullWidth
-              variant="contained"
+              // variant="contained"
+              color='secondary'
               sx={{ mt: 3, mb: 2 }}
               onClick={submitBooking}
             >
               submit booking
+            </Button>
+            {/* back to publish list page */}
+            <Button
+              type="submit"
+              fullWidth
+              color='primary'
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={GoBackToListing}
+            >
+              Back to Publish Listing
             </Button>
           </Box>
         </Box>
