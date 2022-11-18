@@ -538,7 +538,6 @@ export default function Edit () {
             </Button>
           </Box>
             <Button
-            type="submit"
             fullWidth
             color='primary'
             variant="contained"

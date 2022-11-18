@@ -54,19 +54,6 @@ function CheckBooking () {
       })
     })
   }, [fetchData])
-  // console.log('listingID', listingID)
-  // const listIDOnly = listingID.map(item => JSON.parse(item))
-  // const listTitle = []
-  // for (let i = 0; i < listIDOnly.length; i++) {
-  //   for (let j = 0; j < list.length; j++) {
-  //     // let Image = { id: '', thumbnail: [] }
-  //     if (list[j].id === listIDOnly[i]) {
-  //       listTitle.push(list[j].title)
-  //     }
-  //   }
-  // }
-  // console.log('after', listTitle)
-  // console.log('bookInfo', bookingInfo)
   console.log('list', list)
   console.log('listID', listID)
   const showList = []

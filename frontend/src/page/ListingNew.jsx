@@ -21,6 +21,7 @@ import UploadPhoto from './listingNewComponents/UploadPhoto';
 import { initData } from '../services/config'
 import ErrorPopup from '../components/errorPopupWindow';
 import errorPop from '../components/errorPopup';
+import { useHistory } from 'react-router'
 // import fetchFunc from '../services/fetchRequest'
 
 const steps = ['Choose type', 'House address', 'House details', 'House amentities', 'Upload photo'];
@@ -46,6 +47,7 @@ function getStepContent (step) {
 
 export default function Checkout () {
   const [activeStep, setActiveStep] = React.useState(0);
+  const history = useHistory()
   console.log(activeStep);
   console.log(initData);
   // const [dataState, setdataState] = React.useState(initData)
@@ -63,6 +65,10 @@ export default function Checkout () {
       return true
     }
   }
+  // go back to listing
+  const GoBackToMyListing = () => {
+    history.push('/MyListing')
+  };
   // check first page
   const checkFirstFormValidation = () => {
     if (
@@ -202,6 +208,14 @@ export default function Checkout () {
               </Box>
             </React.Fragment>
           )}
+        {activeStep === steps.length - 1 && (
+        <Button
+        color='primary'
+        variant="contained"
+        onClick={GoBackToMyListing}
+        >
+        Go Back to My Listing
+        </Button>)}
         </Paper>
       </Container>
     </React.Fragment>
