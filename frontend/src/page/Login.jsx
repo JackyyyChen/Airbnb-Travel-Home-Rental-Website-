@@ -39,7 +39,7 @@ export default function SignIn (props) {
     event.preventDefault();
     const info = new FormData(event.currentTarget);
     const userInfo = { email: info.get('email'), password: info.get('password') }
-    // console.log(userInfo);
+    console.log(userInfo);
     const response = await fetchFunc('/user/auth/login', 'POST', userInfo)
     const data = await response.json();
     if (data.error) {
@@ -70,7 +70,7 @@ export default function SignIn (props) {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#DC0F62' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -107,11 +107,11 @@ export default function SignIn (props) {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, bgcolor: '#DC0F62' }}
             >
               Sign In
             </Button>
-                <Link to="/register" variant="body2">
+                <Link to="/register" variant="body2" >
                   {"Don't have an account? Sign Up"}
                 </Link>
           </Box>

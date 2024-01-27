@@ -1,5 +1,4 @@
-
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 // import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -32,14 +31,14 @@ import { useHistory } from 'react-router'
 
 function Copyright () {
   return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit">
-        AirBrB
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+      <Typography variant="body2" color="text.secondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit">
+          AirBrB
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
   );
 }
 
@@ -143,7 +142,6 @@ export default function AvailableList (props) {
   const CloseCommentWindow = (e) => {
     setOpenCommentModal(false)
   }
-
   // go to booking page
   const GoToBooking = (e) => {
     console.log('gotoedit');
@@ -160,6 +158,19 @@ export default function AvailableList (props) {
   }
   console.log(temp)
 
+  // Loading text, after 5s change
+  const [loadingMessage, setLoadingMessage] = useState('Loading...111');
+  useEffect(() => {
+    // 如果列表为空，则开始计时器
+    if (lists.length === 0) {
+      const timer = setTimeout(() => {
+        setLoadingMessage('No items');
+      }, 5000); // 5000 毫秒后更新文本
+      // console.log('loading', loadingMessage)
+      return () => clearTimeout(timer); // 组件卸载时清除计时器
+    }
+  }, [lists]);
+
   for (let i = 0; i < temp.length; i++) {
     if (temp[i].title === commentTitle) {
       console.log('yes')
@@ -167,33 +178,33 @@ export default function AvailableList (props) {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <main>
-        {/* Hero unit */}
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            pt: 8,
-            pb: 6,
-          }}
-        >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h3"
-              align="center"
-              color="text.primary"
-              gutterBottom
-            >
-              All publish lists
-            </Typography>
-          </Container>
-        </Box>
-        <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
-          {/* if no publish */}
-          {lists.length === 0 && (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <main>
+          {/* Hero unit */}
+          <Box
+              sx={{
+                bgcolor: 'background.paper',
+                pt: 8,
+                pb: 6,
+              }}
+          >
+            <Container maxWidth="sm">
+              <Typography
+                  component="h1"
+                  variant="h3"
+                  align="center"
+                  color="text.primary"
+                  gutterBottom
+              >
+                All publish lists
+              </Typography>
+            </Container>
+          </Box>
+          <Container sx={{ py: 8 }} maxWidth="md">
+            {/* End hero unit */}
+            {/* if no publish */}
+            {/* {lists.length === 0 && (
             <Grid container>
             <Grid item xs={12} align='center'>
                 <Typography variant='h5'>Loading...</Typography>
@@ -203,232 +214,254 @@ export default function AvailableList (props) {
                 </Typography>
             </Grid>
             </Grid>
-          )}
-        {lists.length !== 0 && (
-          <Grid container spacing={3}>
-            {lists.map((card) => (
-              <Grid item key={card.id} className={styles.item} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                >
-                  <div className={styles.root}>
-                      <ImageList className={styles.imageList} cols={1}>
-                        {getAllImage(card.thumbnail).map((imageBase64) => {
-                          return (
-                            <ImageListItem key={imageBase64}>
-                              <img src={imageBase64} alt='Image of listings' />
-                            </ImageListItem>
-                          )
-                        })}
-                      </ImageList>
-                  </div>
-                  <CardContent sx={{ flexGrow: 1 }}>
-                  <Grid container className={styles.gridContainer}>
-                    {/* title */}
-                      <Typography
-                        gutterBottom
-                        variant='body2'
-                        color='textPrimary'
-                        align='center'
-                      >
-                        <span className={styles.boldFont}>Title:</span>
-                        {` ${card.title}`}
-                      </Typography>
-                      {/* price */}
-                      <Typography
-                        variant='body2'
-                        color='textPrimary'
-                        align='center'
-                      >
-                        <span className={styles.boldFont}>Price:</span>
-                        {` $${card.price} per night`}
-                      </Typography>
-                      {/* property */}
-                      <Typography
-                        variant='body2'
-                        color='textPrimary'
-                        align='center'
-                        gutterBottom
-                      >
+          )} */}
+            {lists.length === 0 && (
+                <Grid container>
+                  <Grid item xs={12} align='center'>
+                    <Typography variant='h5'>{loadingMessage}</Typography>
+                    <Typography variant='body1'>
+                      (If loading time too long, maybe you do not have any hosted
+                      listing, go to create a new one)
+                    </Typography>
+                  </Grid>
+                </Grid>
+            )}
+            {lists.length !== 0 && (
+                <Grid container spacing={3}>
+                  {lists.map((card) => (
+                      <Grid item key={card.id} className={styles.item} xs={12} sm={6} md={4}>
+                        <Card
+                            sx={{
+                              height: '100%',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              boxShadow: 3,
+                              borderRadius: 2,
+                              '&:hover': {
+                                boxShadow: 5,
+                                transform: 'scale(1.02)',
+                                transition: 'transform .2s ease-in-out',
+                              }
+                            }}
+                        >
+                          <div className={styles.root}>
+                            <ImageList className={styles.imageList} cols={1}>
+                              {getAllImage(card.thumbnail).map((imageBase64) => {
+                                return (
+                                    <ImageListItem key={imageBase64}>
+                                      < img src={imageBase64} alt='Image of listings' />
+                                    </ImageListItem>
+                                )
+                              })}
+                            </ImageList>
+                          </div>
+                          <CardContent sx={{ flexGrow: 1 }}>
+                            <Grid container className={styles.gridContainer}>
+                              {/* title */}
+                              <Typography
+                                  gutterBottom
+                                  variant='body2'
+                                  color='textPrimary'
+                                  align='center'
+                              >
+                                <span className={styles.boldFont}>Title:</span>
+                                {` ${card.title}`}
+                              </Typography>
+                              {/* price */}
+                              <Typography
+                                  variant='body2'
+                                  color='textPrimary'
+                                  align='center'
+                              >
+                                <span className={styles.boldFont}>Price:</span>
+                                {` $${card.price} per night`}
+                              </Typography>
+                              {/* property */}
+                              <Typography
+                                  variant='body2'
+                                  color='textPrimary'
+                                  align='center'
+                                  gutterBottom
+                              >
                         <span className={styles.boldFont}>
                           Property type:
                         </span>
-                        {card.metadata.entirePlace && (' Entire place')}
-                        {card.metadata.privateRoom && (' Private room')}
-                        {card.metadata.shareRoom && (' Share room')}
-                      </Typography>
-                      {/* address */}
-                    <Grid item xs={12}>
-                        <Typography
-                          variant='body2'
-                          color='textPrimary'
-                          align='center'
-                        >
-                          <span className={styles.boldFont}>Street:</span>
-                          {` ${card.address.street} `}
-                          <span className={styles.boldFont}>City:</span>
-                          {` ${card.address.city} `}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography
-                          variant='body2'
-                          color='textPrimary'
-                          align='center'
-                        >
-                          <span className={styles.boldFont}>State:</span>
-                          {` ${card.address.state} `}
-                          <span className={styles.boldFont}>Postcode:</span>
-                          {` ${card.address.postcode} `}
-                          <span className={styles.boldFont}>Country:</span>
-                          {` ${card.address.country} `}
-                        </Typography>
+                                {card.metadata.entirePlace && (' Entire place')}
+                                {card.metadata.privateRoom && (' Private room')}
+                                {card.metadata.shareRoom && (' Share room')}
+                              </Typography>
+                              {/* address */}
+                              <Grid item xs={12}>
+                                <Typography
+                                    variant='body2'
+                                    color='textPrimary'
+                                    align='center'
+                                >
+                                  <span className={styles.boldFont}>Street:</span>
+                                  {` ${card.address.street} `}
+                                  <span className={styles.boldFont}>City:</span>
+                                  {` ${card.address.city} `}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography
+                                    variant='body2'
+                                    color='textPrimary'
+                                    align='center'
+                                >
+                                  <span className={styles.boldFont}>State:</span>
+                                  {` ${card.address.state} `}
+                                  <span className={styles.boldFont}>Postcode:</span>
+                                  {` ${card.address.postcode} `}
+                                  <span className={styles.boldFont}>Country:</span>
+                                  {` ${card.address.country} `}
+                                </Typography>
+                              </Grid>
+                              {/* address end */}
+                            </Grid>
+                            <Grid container className={styles.gridContainer}>
+                              {/* bed number */}
+                              <Grid item xs={6} align='center' className={styles.item}>
+                                <HotelIcon />
+                                {calculateBeds(card)}
+                              </Grid>
+                              {/* bathRoom number */}
+                              <Grid item xs={6} align='center' className={styles.item}>
+                                <BathtubIcon />&nbsp;
+                                {`${card.metadata.bathRoomNumber} bathrooms`}
+                              </Grid>
+                              {/* Amenities types */}
+                              <Grid item xs={15} align='center' className={styles.item}>
+                                <span className={styles.boldFont}>Amenities:&nbsp;&nbsp;</span>
+                                {card.metadata.poop === true && (<PoolRoundedIcon />)}
+                                {card.metadata.BBQ === true && (<OutdoorGrillRoundedIcon />)}
+                                {card.metadata.parking === true && (<LocalParkingSharpIcon />)}
+                                {card.metadata.airCondition === true && (<AcUnitSharpIcon />)}
+                                {card.metadata.wifi === true && (<WifiSharpIcon />)}
+                                {card.metadata.TV === true && (<LiveTvSharpIcon />)}
+                                {card.metadata.kitchen === true && (<CountertopsSharpIcon />)}
+                                {card.metadata.pet === true && (<PetsRoundedIcon />)}
+                              </Grid>
+                            </Grid>
+                            {/* Review */}
+                            <Grid container className={styles.gridContainer}>
+                              <Grid item>{`Total reviews: ${card.reviews.length}`}</Grid>
+                            </Grid>
+                            {/* Show publish */}
+                            <Grid container className={styles.gridContainer}>
+                              <Grid item xs={10}>
+                                {!card.published && (
+                                    <Typography>Unpublish</Typography>
+                                )}
+                                {/* {card.published && showPublishedDate(card)} */}
+                                {card.published && (<Grid item xs={12}>
+                                  <Typography>Available date:</Typography>
+                                  {card.availability.length === 0 && (<h4>Please selet date</h4>)}
+                                  {card.availability.length !== 0 && (
+                                      <React.Fragment>
+                                        {card.availability.map((ele) => {
+                                          return (
+                                              <Typography key={ele.start}>
+                                                <span >From</span>
+                                                {` ${ChangeTimeToDate(ele.start)} `}
+                                                <span >To</span>
+                                                {` ${ChangeTimeToDate(ele.end)}`}
+                                              </Typography>
+                                          )
+                                        })}
+                                      </React.Fragment>)}
+                                </Grid>)}
+                              </Grid>
+                            </Grid>
+                          </CardContent>
+                          <CardActions>
+                            <Grid container spacing={1}>
+                              <ButtonGroup variant="text" aria-label="text button group">
+                                {/* Edit button */}
+                                {card.availability.length !== 0 && (<Button
+                                    size="small"
+                                    // variant = 'contained'
+                                    name={card.id}
+                                    onClick={GoToBooking}
+                                >
+                                  Booking
+                                </Button>)}
+                                {/* see comment */}
+                                <Button
+                                    size="small"
+                                    name={card.title}
+                                    onClick={OpenCommentWindow}
+                                >
+                                  View Comments
+                                </Button>
+                              </ButtonGroup>
+                            </Grid>
+                          </CardActions>
+                        </Card>
                       </Grid>
-                      {/* address end */}
-                  </Grid>
-                  <Grid container className={styles.gridContainer}>
-                    {/* bed number */}
-                    <Grid item xs={6} align='center' className={styles.item}>
-                      <HotelIcon />
-                      {calculateBeds(card)}
-                    </Grid>
-                    {/* bathRoom number */}
-                    <Grid item xs={6} align='center' className={styles.item}>
-                      <BathtubIcon />&nbsp;
-                      {`${card.metadata.bathRoomNumber} bathrooms`}
-                    </Grid>
-                    {/* Amenities types */}
-                    <Grid item xs={15} align='center' className={styles.item}>
-                    <span className={styles.boldFont}>Amenities:&nbsp;&nbsp;</span>
-                      {card.metadata.poop === true && (<PoolRoundedIcon />)}
-                      {card.metadata.BBQ === true && (<OutdoorGrillRoundedIcon />)}
-                      {card.metadata.parking === true && (<LocalParkingSharpIcon />)}
-                      {card.metadata.airCondition === true && (<AcUnitSharpIcon />)}
-                      {card.metadata.wifi === true && (<WifiSharpIcon />)}
-                      {card.metadata.TV === true && (<LiveTvSharpIcon />)}
-                      {card.metadata.kitchen === true && (<CountertopsSharpIcon />)}
-                      {card.metadata.pet === true && (<PetsRoundedIcon />)}
-                    </Grid>
-                  </Grid>
-                  {/* Review */}
-                  <Grid container className={styles.gridContainer}>
-                    <Grid item>{`Total reviews: ${card.reviews.length}`}</Grid>
-                  </Grid>
-                  {/* Show publish */}
-                  <Grid container className={styles.gridContainer}>
-                    <Grid item xs={10}>
-                      {!card.published && (
-                        <Typography>Unpublish</Typography>
-                      )}
-                      {/* {card.published && showPublishedDate(card)} */}
-                      {card.published && (<Grid item xs={12}>
-                    <Typography>Available date:</Typography>
-                    {card.availability.length === 0 && (<h4>Please selet date</h4>)}
-                    {card.availability.length !== 0 && (
-                    <React.Fragment>
-                      {card.availability.map((ele) => {
-                        return (
-                      <Typography key={ele.start}>
-                      <span >From</span>
-                      {` ${ChangeTimeToDate(ele.start)} `}
-                      <span >To</span>
-                      {` ${ChangeTimeToDate(ele.end)}`}
-                      </Typography>
-                        )
-                      })}
-                    </React.Fragment>)}
-                    </Grid>)}
-                  </Grid>
-                  </Grid>
-                  </CardContent>
-                  <CardActions>
-                    <Grid container spacing={1}>
-                    <ButtonGroup variant="text" aria-label="text button group">
-                      {/* Edit button */}
-                      {card.availability.length !== 0 && (<Button
-                      size="small"
-                      // variant = 'contained'
-                      name={card.id}
-                      onClick={GoToBooking}
-                      >
-                      Booking
-                      </Button>)}
-                      {/* see comment */}
-                      <Button
-                      size="small"
-                      name={card.title}
-                      onClick={OpenCommentWindow}
-                      >
-                      View Comments
-                      </Button>
-                    </ButtonGroup>
-                    </Grid>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>)}
-        </Container>
-      </main>
-      {/* comment modal */}
-      <Modal
-        open={openCommenteModal}
-        onClose={CloseCommentWindow}
-        aria-labelledby='simple-modal-title'
-        aria-describedby='simple-modal-description'
-      >
-        <div style={modalStyle} className={styles.paper}>
-          {/* <h3>Do you want to delete this list?</h3> */}
-          {/* price */}
-          {temp.map((card) => (
-            <Grid item key={card.title} xs={12} sm={6} md={4}>
-              {card.title === commentTitle && card.reviews.length !== 0 && (
-              <Typography
-                  variant='body2'
-                  color='textPrimary'
-                  align='center'
-                >
-                  <span className={styles.boldFont}>Comment:</span>
-                  {` ${card.reviews}`}
-              </Typography>
-              )}
-              {card.title === commentTitle && card.reviews.length === 0 && (
-              <Typography
-                  variant='body2'
-                  color='textPrimary'
-                  align='center'
-                >
-                <span className={styles.boldFont}>This list has no comment</span>
-              </Typography>
-              )}
-            </Grid>
-          ))}
-          <Button
-            size='large'
-            color='secondary'
-            onClick={CloseCommentWindow}
-          >
-            Return
-          </Button>
-        </div>
-      </Modal>
-      {/* Footer */}
-      <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
+                  ))}
+                </Grid>)}
+          </Container>
+        </main>
+        {/* comment modal */}
+        <Modal
+            open={openCommenteModal}
+            onClose={CloseCommentWindow}
+            aria-labelledby='simple-modal-title'
+            aria-describedby='simple-modal-description'
         >
-          Have a good travel!
-        </Typography>
-        <Copyright />
-      </Box>
-      {/* End footer */}
-    </ThemeProvider>
+          <div style={modalStyle} className={styles.paper}>
+            {/* <h3>Do you want to delete this list?</h3> */}
+            {/* price */}
+            {temp.map((card) => (
+                <Grid item key={card.title} xs={12} sm={6} md={4}>
+                  {card.title === commentTitle && card.reviews.length !== 0 && (
+                      <Typography
+                          variant='body2'
+                          color='textPrimary'
+                          align='center'
+                      >
+                        <span className={styles.boldFont}>Comment:</span>
+                        {` ${card.reviews}`}
+                      </Typography>
+                  )}
+                  {card.title === commentTitle && card.reviews.length === 0 && (
+                      <Typography
+                          variant='body2'
+                          color='textPrimary'
+                          align='center'
+                      >
+                        <span className={styles.boldFont}>This list has no comment</span>
+                      </Typography>
+                  )}
+                </Grid>
+            ))}
+            <Button
+                size='large'
+                color='secondary'
+                onClick={CloseCommentWindow}
+            >
+              Return
+            </Button>
+          </div>
+        </Modal>
+        {/* Footer */}
+        <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
+          <Typography variant="h6" align="center" gutterBottom>
+            Footer
+          </Typography>
+          <Typography
+              variant="subtitle1"
+              align="center"
+              color="text.secondary"
+              component="p"
+          >
+            Have a good travel!
+          </Typography>
+          <Copyright />
+        </Box>
+        {/* End footer */}
+      </ThemeProvider>
   );
 }
 

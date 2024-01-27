@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -114,6 +114,20 @@ export default function MyBooking (props) {
       setOpenDeleteModal(false)
     })
   }
+
+  // Loading text, after 5s change
+  const [loadingMessage, setLoadingMessage] = useState('Loading...');
+  useEffect(() => {
+    // 如果列表为空，则开始计时器
+    if (lists.length === 0) {
+      const timer = setTimeout(() => {
+        setLoadingMessage('No items, go to create a new one!');
+      }, 5000); // 5000 毫秒后更新文本
+      // console.log('loading', loadingMessage)
+      return () => clearTimeout(timer); // 组件卸载时清除计时器
+    }
+  }, [lists]);
+
   // make a comment
   // Open comment window
   const OpenCommentModal = (e) => {
@@ -140,8 +154,8 @@ export default function MyBooking (props) {
     }
     fetchFunc(`/listings/${listingID}/review/${bookingID}`, 'PUT', comment).then((response) => {
       if (response.status !== 200) {
-      //   const errorMessageInput = 'You comment have not sent';
-      //   errorPop(errorMessageInput);
+        //   const errorMessageInput = 'You comment have not sent';
+        //   errorPop(errorMessageInput);
         alert('You comment have not sent')
       }
       setFetchData((preState) => !preState)
@@ -153,189 +167,200 @@ export default function MyBooking (props) {
     console.log(comment, bookingID, listingID)
   }
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <ErrorPopup></ErrorPopup>
-      <main>
-        {/* Hero unit */}
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            pt: 2,
-            pb: 1,
-          }}
-        >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-            >
-              My Booking
-            </Typography>
-          </Container>
-        </Box>
-        <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-          {lists.length === 0 && (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ErrorPopup></ErrorPopup>
+        <main>
+          {/* Hero unit */}
+          <Box
+              sx={{
+                bgcolor: 'background.paper',
+                pt: 10,
+                pb: 1,
+              }}
+          >
+            <Container maxWidth="sm">
+              <Typography
+                  component="h1"
+                  variant="h2"
+                  align="center"
+                  color="text.primary"
+              >
+                My Booking
+              </Typography>
+            </Container>
+          </Box>
+          <Container sx={{ py: 8 }} maxWidth="md">
+            {/* End hero unit */}
+            <Grid container spacing={4}>
+              {/* {lists.length === 0 && (
             <Grid container>
             <Grid item xs={12} align='center'>
-                <Typography variant='h5'>Loading...</Typography>
+                <Typography variant='h5'>availability...</Typography>
                 <Typography variant='body1'>
                 (If loading time too long, maybe you do not have a booking)
                 </Typography>
             </Grid>
             </Grid>
-          )}
-          {lists.length !== 0 && (
-          <Grid container spacing={3}>
-            {lists.map((card) => (
-              <Grid item key={card.id} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                >
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    {/* bookingID */}
-                    <Typography
-                        variant='body2'
-                        color='textPrimary'
-                        align='center'
-                      >
-                        <span className={styles.boldFont}>BookingID:</span>
-                        {` ${card.id}`}
-                    </Typography>
-                    {/* booking owner */}
-                    <Typography
-                        variant='body2'
-                        color='textPrimary'
-                        align='center'
-                      >
-                        <span className={styles.boldFont}>Booking user:</span>
-                        {` ${card.owner}`}
-                    </Typography>
-                    {/* booking date */}
-                    <Typography><span className={styles.boldFont}>Available date:</span></Typography>
-                    <React.Fragment>
-                      <Typography>
-                      <span >From</span>
-                      {` ${ChangeTimeToDate(card.dateRange.start)} `}
-                      <span >To</span>
-                      {` ${ChangeTimeToDate(card.dateRange.end)}`}
-                      </Typography>
-                    </React.Fragment>
-                    {/* price */}
-                    <Typography
-                        variant='body2'
-                        color='textPrimary'
-                        align='center'
-                      >
-                        <span className={styles.boldFont}>Total Price:</span>
-                        {` $${card.totalPrice}`}
-                      </Typography>
-                    {/* booking status */}
-                    <Typography
-                        variant='body2'
-                        color='textPrimary'
-                        align='center'
-                      >
-                        <span className={styles.boldFont}>Booking status:</span>
-                        {` ${card.status}`}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                {/* comment this booking */}
-                  {card.status === 'accepted' && (<Button
-                    size="small"
-                    color="primary"
-                    name={card.id}
-                    value={card.listingId}
-                    onClick={OpenCommentModal}>
-                    Comment
-                    </Button>)}
-                    {card.status === 'pending' && (<Button
-                    size="small"
-                    color="primary"
-                    disabled
-                    >
-                    Comment
-                    </Button>)}
-                {/* delete this booking */}
-                    <Button
-                    size="small"
-                    color="secondary"
-                    name={card.id}
-                    onClick={OpenDeleteWindow}>
-                    Delete This Booking
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>)}
-          </Grid>
-        </Container>
-      </main>
-      {/* comment modal */}
-      <Modal
-        open={openCommentModal}
-        onClose={CloseCommentModal}
-        aria-labelledby='simple-modal-title'
-        aria-describedby='simple-modal-description'
-      >
-        <div style={modalStyle} className={styles.paper}>
-          <h3>Do you want to leave a comment</h3>
-          {/* write comment */}
-          <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="comment"
-              name="comment"
-              label="Leave your comment"
-              sx={{ mb: 1 }}
-              autoFocus
-              onChange={makeComment}
-              // value='jacky@unsw'
+          )} */}
+              {lists.length === 0 && (
+                  <Grid container>
+                    <Grid item xs={12} align='center'>
+                      <Typography variant='h5'>{loadingMessage}</Typography>
+                      {/* <Typography variant='body1'>
+             (If loading time too long, maybe you do not have any hosted
+             listing, go to create a new one)
+           </Typography> */}
+                    </Grid>
+                  </Grid>
+              )}
+              {lists.length !== 0 && (
+                  <Grid container spacing={3}>
+                    {lists.map((card) => (
+                        <Grid item key={card.id} xs={12} sm={6} md={4}>
+                          <Card
+                              sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                          >
+                            <CardContent sx={{ flexGrow: 1 }}>
+                              {/* bookingID */}
+                              <Typography
+                                  variant='body2'
+                                  color='textPrimary'
+                                  align='center'
+                              >
+                                <span className={styles.boldFont}>BookingID:</span>
+                                {` ${card.id}`}
+                              </Typography>
+                              {/* booking owner */}
+                              <Typography
+                                  variant='body2'
+                                  color='textPrimary'
+                                  align='center'
+                              >
+                                <span className={styles.boldFont}>Booking user:</span>
+                                {` ${card.owner}`}
+                              </Typography>
+                              {/* booking date */}
+                              <Typography><span className={styles.boldFont}>Available date:</span></Typography>
+                              <React.Fragment>
+                                <Typography>
+                                  <span >From</span>
+                                  {` ${ChangeTimeToDate(card.dateRange.start)} `}
+                                  <span >To</span>
+                                  {` ${ChangeTimeToDate(card.dateRange.end)}`}
+                                </Typography>
+                              </React.Fragment>
+                              {/* price */}
+                              <Typography
+                                  variant='body2'
+                                  color='textPrimary'
+                                  align='center'
+                              >
+                                <span className={styles.boldFont}>Total Price:</span>
+                                {` $${card.totalPrice}`}
+                              </Typography>
+                              {/* booking status */}
+                              <Typography
+                                  variant='body2'
+                                  color='textPrimary'
+                                  align='center'
+                              >
+                                <span className={styles.boldFont}>Booking status:</span>
+                                {` ${card.status}`}
+                              </Typography>
+                            </CardContent>
+                            <CardActions>
+                              {/* comment this booking */}
+                              {card.status === 'accepted' && (<Button
+                                  size="small"
+                                  color="primary"
+                                  name={card.id}
+                                  value={card.listingId}
+                                  onClick={OpenCommentModal}>
+                                Comment
+                              </Button>)}
+                              {card.status === 'pending' && (<Button
+                                  size="small"
+                                  color="primary"
+                                  disabled
+                              >
+                                Comment
+                              </Button>)}
+                              {/* delete this booking */}
+                              <Button
+                                  size="small"
+                                  color="secondary"
+                                  name={card.id}
+                                  onClick={OpenDeleteWindow}>
+                                Delete This Booking
+                              </Button>
+                            </CardActions>
+                          </Card>
+                        </Grid>
+                    ))}
+                  </Grid>)}
+            </Grid>
+          </Container>
+        </main>
+        {/* comment modal */}
+        <Modal
+            open={openCommentModal}
+            onClose={CloseCommentModal}
+            aria-labelledby='simple-modal-title'
+            aria-describedby='simple-modal-description'
+        >
+          <div style={modalStyle} className={styles.paper}>
+            <h3>Do you want to leave a comment</h3>
+            {/* write comment */}
+            <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="comment"
+                name="comment"
+                label="Leave your comment"
+                sx={{ mb: 1 }}
+                autoFocus
+                onChange={makeComment}
+                // value='jacky@unsw'
             />
-        {/* button group */}
+            {/* button group */}
             <Button
-            onClick={submitComment}
+                onClick={submitComment}
             >
-            Sent
+              Sent
             </Button>
-          <Button
-            size='large'
-            color='secondary'
-            onClick={CloseCommentModal}
-          >
-            No
-          </Button>
-        </div>
-      </Modal>
-      {/* delete modal */}
-      <Modal
-        open={openDeleteModal}
-        onClose={CloseDeleteWindow}
-        aria-labelledby='simple-modal-title'
-        aria-describedby='simple-modal-description'
-      >
-        <div style={modalStyle} className={styles.paper}>
-          <h3>Do you want to delete this list?</h3>
-          <Button size='large' color='primary' onClick={submitDelete}>
-            Yes
-          </Button>
-          <Button
-            size='large'
-            color='secondary'
-            onClick={CloseDeleteWindow}
-          >
-            No
-          </Button>
-        </div>
-      </Modal>
-    </ThemeProvider>
+            <Button
+                size='large'
+                color='secondary'
+                onClick={CloseCommentModal}
+            >
+              No
+            </Button>
+          </div>
+        </Modal>
+        {/* delete modal */}
+        <Modal
+            open={openDeleteModal}
+            onClose={CloseDeleteWindow}
+            aria-labelledby='simple-modal-title'
+            aria-describedby='simple-modal-description'
+        >
+          <div style={modalStyle} className={styles.paper}>
+            <h3>Do you want to delete this list?</h3>
+            <Button size='large' color='primary' onClick={submitDelete}>
+              Yes
+            </Button>
+            <Button
+                size='large'
+                color='secondary'
+                onClick={CloseDeleteWindow}
+            >
+              No
+            </Button>
+          </div>
+        </Modal>
+      </ThemeProvider>
   );
 }
 

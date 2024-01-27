@@ -4,16 +4,22 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 // import Modal from '@mui/material/Modal';
 import PropTypes from 'prop-types';
 
 export default function OutlinedCard (props) {
   return (
-        <Box sx={{ mt: 6, ml: 6, mb: 6, width: 275, display: 'none' }} id='errorPopupWindow'>
+        <Box sx={{ position: 'absolute', top: '20%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, display: 'none' }} id='errorPopupWindow'>
         <Card variant="outlined" >
         <React.Fragment>
         <CardContent>
-          <div id='errorContent'></div>
+        <Typography color="error" variant="h5" component="div">
+            Error
+        </Typography>
+        <Typography variant="body2" id='errorContent'>
+            {/* <div id='errorContent'></div> */}
+        </Typography>
         </CardContent>
         <CardActions>
           <Button id='closePopupWindow'>Close</Button>

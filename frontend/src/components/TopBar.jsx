@@ -25,23 +25,27 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles({
-  buttonStyle: {
-    border: 0,
-    borderRadius: 3,
-    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-    padding: '0 30px',
+  searchBar: {
+    border: '0.5px solid black',
+    borderRadius: 10,
+    // boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'black',
   },
+  textColor: {
+    color: '#232222',
+    textDecoration: 'none'
+  }
 });
 
 const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+  position: 'sticky',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginRight: theme.spacing(2),
-  marginLeft: 0,
+  marginLeft: 30,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
@@ -70,6 +74,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
+    color: 'black'
   },
 }));
 
@@ -81,9 +86,10 @@ export default function PrimarySearchAppBar (props) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  // const handleProfileMenuOpen = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+  const handleSearch = (event) => {
+    const searchContent = event.target.value
+    console.log(searchContent)
+  }
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -179,132 +185,148 @@ export default function PrimarySearchAppBar (props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* Dashboard */}
-      {/* <MenuItem>
-      <span><Link to="/Dashboard" variant="body2">
-        <IconButton size="large" aria-label="mail" color="inherit">
-            <DashboardOutlinedIcon />
-        </IconButton>Dashboard</Link></span>
-      </MenuItem> */}
-      {/* Current Listing */}
       <MenuItem>
-      <span><Link to="/MyListing" variant="body2">
-        <IconButton size="large" aria-label="Notifications" color="inherit">
-          <HomeWorkOutlinedIcon />
-        </IconButton>MyListingPage</Link></span>
+      <span>
+        <Link
+        to="/MyListing"
+        className={styles.textColor}
+        >
+          <IconButton
+          size="large"
+          aria-label="Notifications"
+          sx={{ color: '#232222' }}>
+            <HomeWorkOutlinedIcon />
+          </IconButton>MyListingPage
+        </Link>
+      </span>
       </MenuItem>
       {/* Listing New */}
       <MenuItem>
-      <span><Link to="/listingNew" variant="body2">
-        <IconButton size="large" aria-label="Notifications" color="inherit">
-          <NoteAddIcon />
-        </IconButton>ListingNew</Link></span>
+      <span>
+        <Link
+        to="/listingNew"
+        className={styles.textColor}
+        >
+          <IconButton
+          size="large"
+          aria-label="Notifications"
+          sx={{ color: '#232222' }}>
+            <NoteAddIcon />
+          </IconButton>ListingNew
+        </Link>
+      </span>
       </MenuItem>
       {/* All listing in publish */}
       <MenuItem>
-      <span><Link to="/AllListing" variant="body2">
-        <IconButton size="large" aria-label="Notifications" color="inherit">
+      <span>
+      <Link
+      to="/AllListing"
+      className={styles.textColor}
+      >
+        <IconButton
+        size="large"
+        aria-label="Notifications"
+        sx={{ color: '#232222' }}>
           <TravelExploreIcon />
         </IconButton>Published lists</Link></span>
       </MenuItem>
-
-      {/* <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem> */}
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar
+      position="static"
+      sx={{
+        bgcolor: '#FFFFFF',
+        boxShadow: 'none',
+        height: '70px',
+        minWidth: 300,
+        position: 'fixed',
+        borderBottom: (t) => `1px solid ${t.palette.divider}`,
+      }}>
         <Toolbar>
-            {!token && (
-              <>
-                <span><Link to="/login" variant="body2">Login</Link></span>&nbsp;|&nbsp;<span><Link to="/register">Register</Link></span>
-              </>
-            )}
-            {token && (
-              // <BigButton onClick={logoutBtn}>Logout</BigButton>
-              <Button size='small'
-              color='secondary'
-              variant = 'contained'
-              onClick={logoutBtn}
-              className={styles.buttonStyle}
-              >Logout</Button>
-            )}
-          {/* <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
-          </Typography> */}
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* ###################################### */}
-            {/* <span><Link to="/Dashboard" variant="body2">
-            <IconButton size="large" aria-label="mail" color="inherit">
-                <DashboardOutlinedIcon />
-            </IconButton></Link></span> */}
-            <span><Link to="/MyListing" variant="body2">
-            {/* my listing */}
-            <IconButton size="large" aria-label="Notifications" color="inherit">
-              <HomeWorkOutlinedIcon />
-            </IconButton></Link></span>
-            {/* Listing new */}
-            <span><Link to="/listingNew" variant="body2">
-            <IconButton size="large" aria-label="Notifications" color="inherit">
-              <NoteAddIcon />
-            </IconButton></Link></span>
-            {/* All listing in publish */}
-            <span><Link to="/AllListing" variant="body2">
-              <IconButton size="large" aria-label="Notifications" color="inherit">
-                <TravelExploreIcon />
-              </IconButton></Link></span>
-            {/* ###################################### */}
-            {/* <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton> */}
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', sm: 'none', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="show more"
               aria-controls={mobileMenuId}
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
-              color="inherit"
+              color="#232222"
             >
               <MoreIcon />
             </IconButton>
           </Box>
+          <Box sx={{ display: { xs: 'none', sm: 'flex', md: 'flex' } }}>
+            {/* ###################################### */}
+            <span><Link to="/MyListing" variant="body2">
+            {/* my listing */}
+            <IconButton
+            size="large"
+            aria-label="Notifications"
+            sx={{ color: '#232222' }}>
+              <HomeWorkOutlinedIcon />
+            </IconButton></Link></span>
+            {/* Listing new */}
+            <span><Link to="/listingNew" variant="body2">
+            <IconButton
+            size="large"
+            aria-label="Notifications"
+            sx={{ color: '#232222' }}>
+              <NoteAddIcon />
+            </IconButton></Link></span>
+            {/* All listing in publish */}
+            <span><Link to="/AllListing" variant="body2">
+              <IconButton
+              size="large"
+              aria-label="Notifications"
+              sx={{ color: '#232222' }}>
+                <TravelExploreIcon />
+              </IconButton></Link></span>
+            {/* ###################################### */}
+          </Box>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon
+              sx={{ color: '#232222' }}/>
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+              className={styles.searchBar}
+              type='text'
+              name='searchContent'
+              onChange={handleSearch}
+            />
+          </Search>
+          <Box sx={{ flexGrow: 1 }} />
+            {!token && (
+              <>
+                <span>
+                <Link
+                to="/login"
+                className={styles.textColor}
+                >Login
+                </Link>
+                </span>
+                <span className={styles.textColor}>&nbsp;|&nbsp;</span>
+                <span>
+                <Link
+                to="/register"
+                className={styles.textColor}
+                >
+                Register
+                </Link></span>
+              </>
+            )}
+            {token && (
+              // <BigButton onClick={logoutBtn}>Logout</BigButton>
+              <Button
+              onClick={logoutBtn}
+              sx={{ m: 1, bgcolor: '#DC0F62', color: 'white' }}
+              >Logout</Button>
+            )}
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
