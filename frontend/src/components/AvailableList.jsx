@@ -16,7 +16,8 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types'
-import { makeStyles, ImageList, ImageListItem, Modal } from '@material-ui/core'
+// import { makeStyles, ImageList, ImageListItem, Modal } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import HotelIcon from '@material-ui/icons/Hotel'
 import BathtubIcon from '@material-ui/icons/Bathtub'
 import PoolRoundedIcon from '@mui/icons-material/PoolRounded';
@@ -28,7 +29,11 @@ import CountertopsSharpIcon from '@mui/icons-material/CountertopsSharp';
 import PetsRoundedIcon from '@mui/icons-material/PetsRounded';
 import OutdoorGrillRoundedIcon from '@mui/icons-material/OutdoorGrillRounded';
 import { useHistory } from 'react-router'
-
+import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Modal from '@mui/material/Modal';
 function Copyright () {
   return (
       <Typography variant="body2" color="text.secondary" align="center">
@@ -118,6 +123,60 @@ const ChangeTimeToDate = (second) => {
   return `${day}/${month}/${year}`
 }
 
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+const ImageCarousel = ({ images }) => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [open, setOpen] = useState(false); // 控制模态窗口的打开状态
+  const [selectedImage, setSelectedImage] = useState(''); // 当前选中的图片 URL
+  const multiImages = images.length > 1
+
+  const handleStepChange = (step) => {
+    setActiveStep(step);
+  };
+
+  const handleOpen = (image) => {
+    setSelectedImage(image);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+      <div>
+        {multiImages
+          ? (
+          <AutoPlaySwipeableViews
+            index={activeStep}
+            onChangeIndex={handleStepChange}
+            enableMouseEvents
+          >
+            {images.map((image, index) => (
+                <div key={image} onClick={() => handleOpen(image)}>
+                  <img src={image} alt={`image-${index}`} style={{ width: '100%', height: 'auto', cursor: 'pointer' }} />
+                </div>
+            ))}
+          </AutoPlaySwipeableViews>)
+          : (
+            <div onClick={() => handleOpen(images[0])}>
+              <img src={images[0]} alt="image-0" style={{ width: '100%', height: 'auto', cursor: 'pointer' }} />
+            </div>
+            )}
+          {/* 放大查看的模态窗口 */}
+          <Modal open={open} onClose={handleClose}>
+            <div style={{ position: 'relative', outline: 'none' }}>
+              <img src={selectedImage} alt="Zoomed" style={{ width: '100%', height: 'auto' }} />
+              <IconButton style={{ position: 'absolute', top: 0, right: 0 }} onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </Modal>
+        {/* 可以添加指示器或控制按钮 */}
+      </div>
+  );
+};
 const theme = createTheme();
 
 export default function AvailableList (props) {
@@ -159,23 +218,23 @@ export default function AvailableList (props) {
   console.log(temp)
 
   // Loading text, after 5s change
-  const [loadingMessage, setLoadingMessage] = useState('Loading...111');
+  const [loadingMessage, setLoadingMessage] = useState('Loading...');
   useEffect(() => {
     // 如果列表为空，则开始计时器
     if (lists.length === 0) {
       const timer = setTimeout(() => {
         setLoadingMessage('No items');
-      }, 5000); // 5000 毫秒后更新文本
+      }, 2000); // 5000 毫秒后更新文本
       // console.log('loading', loadingMessage)
       return () => clearTimeout(timer); // 组件卸载时清除计时器
     }
   }, [lists]);
 
-  for (let i = 0; i < temp.length; i++) {
-    if (temp[i].title === commentTitle) {
-      console.log('yes')
-    }
-  }
+  // for (let i = 0; i < temp.length; i++) {
+  //   if (temp[i].title === commentTitle) {
+  //     console.log('yes')
+  //   }
+  // }
 
   return (
       <ThemeProvider theme={theme}>
@@ -240,20 +299,23 @@ export default function AvailableList (props) {
                               '&:hover': {
                                 boxShadow: 5,
                                 transform: 'scale(1.02)',
-                                transition: 'transform .2s ease-in-out',
+                                // transition: 'transform .2s ease-in-out',
                               }
                             }}
                         >
                           <div className={styles.root}>
-                            <ImageList className={styles.imageList} cols={1}>
-                              {getAllImage(card.thumbnail).map((imageBase64) => {
-                                return (
-                                    <ImageListItem key={imageBase64}>
-                                      < img src={imageBase64} alt='Image of listings' />
-                                    </ImageListItem>
-                                )
-                              })}
-                            </ImageList>
+                            {/* <ImageList className={styles.imageList} cols={1}> */}
+                            {/*  {getAllImage(card.thumbnail).map((imageBase64) => { */}
+                            {/*    return ( */}
+                            {/*        <ImageListItem key={imageBase64}> */}
+                            {/*          < img src={imageBase64} alt='Image of listings' /> */}
+                            {/*        </ImageListItem> */}
+                            {/*    ) */}
+                            {/*  })} */}
+                            {/* </ImageList> */}
+                            <div className={styles.root}>
+                              <ImageCarousel images={getAllImage(card.thumbnail)} />
+                            </div>
                           </div>
                           <CardContent sx={{ flexGrow: 1 }}>
                             <Grid container className={styles.gridContainer}>
@@ -470,3 +532,7 @@ AvailableList.propTypes = {
   setFetchData: PropTypes.any,
   bookInfo: PropTypes.any,
 }
+
+ImageCarousel.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

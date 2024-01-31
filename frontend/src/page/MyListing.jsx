@@ -5,15 +5,7 @@ import fetchFunc from '../services/fetchRequest'
 import PropTypes from 'prop-types'
 import ErrorPopup from '../components/errorPopupWindow';
 import errorPop from '../components/errorPopup';
-import HostedLists from '../components/HostedList'
-
-// inital global part
-
-// const useStyle = makeStyles((theme) => ({
-//   container: {
-//     paddingTop: theme.spacing(10)
-//   }
-// }));
+import HostedLists from '../components/HostedList';
 
 function Hosted () {
   // const styles = useStyle();

@@ -40,14 +40,7 @@ import { useHistory } from 'react-router'
 import fetchFunc from '../services/fetchRequest'
 import ErrorPopup from '../components/errorPopupWindow';
 import errorPop from '../components/errorPopup';
-// trying
-// import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-// import DateFnsUtils from '@date-io/date-fns'
-// import { LocalizationProvider } from '@mui/x-date-pickers-pro';
-// import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import TextField from '@mui/material/TextField';
-
+import { useEffect, useState } from 'react';
 function Copyright () {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -137,10 +130,6 @@ export default function HostedLists (props) {
   const [currentListId, setCurrentListId] = React.useState('')
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false)
   const [openUnpublishModal, setOpenUnpublishModal] = React.useState(false)
-  // const [openPublishModal, setOpenPublishModal] = React.useState(false)
-  // const [startTime, setStartTime] = React.useState(null)
-  // const [endTime, setEndTime] = React.useState(null)
-  // const [timeRanges, setTimeRanges] = React.useState([])
   console.log(currentListId)
 
   const ChangeTimeToDate = (second) => {
@@ -190,16 +179,6 @@ export default function HostedLists (props) {
     console.log(e.currentTarget.name);
     history.push(`/publishLish/${e.currentTarget.name}`)
   }
-  // Publish your list
-  // const OpenPublishWindow = (e) => {
-  //   setCurrentListId(e.currentTarget.name)
-  //   setOpenPublishModal(true)
-  // }
-  // Close publish window
-  // const ClosePublishWindow = (e) => {
-  //   setOpenPublishModal(false)
-  // }
-  // Unpublish your list
   // Open Unpublish window
   const OpenUnpublishWindow = (e) => {
     setCurrentListId(e.currentTarget.name)
@@ -225,6 +204,18 @@ export default function HostedLists (props) {
   const handleJumpToBookRequest = (e) => {
     history.push(`/CheckBooking/${e.currentTarget.name}`)
   }
+  // Loading text, after 5s change
+  const [loadingMessage, setLoadingMessage] = useState('Loading...');
+  useEffect(() => {
+    // 如果列表为空，则开始计时器
+    if (lists.length === 0) {
+      const timer = setTimeout(() => {
+        setLoadingMessage('No items');
+      }, 2000); // 5000 毫秒后更新文本
+      // console.log('loading', loadingMessage)
+      return () => clearTimeout(timer); // 组件卸载时清除计时器
+    }
+  }, [lists]);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -252,23 +243,47 @@ export default function HostedLists (props) {
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
           {/* End hero unit */}
+        {/* {lists.length === 0 && ( */}
+        {/* <Grid container> */}
+        {/*  <Grid item xs={12} align='center'> */}
+        {/*    <Typography variant='h5'>Loading...</Typography> */}
+        {/*    <Typography variant='body1'> */}
+        {/*      (If loading time too long, maybe you do not have any hosted */}
+        {/*      listing, go to create a new one) */}
+        {/*    </Typography> */}
+        {/*  </Grid> */}
+        {/* </Grid> */}
+        {/* )}* /}
+        {/*  if user has no booking on list */}
         {lists.length === 0 && (
-        <Grid container>
-          <Grid item xs={12} align='center'>
-            <Typography variant='h5'>Loading...</Typography>
-            <Typography variant='body1'>
-              (If loading time too long, maybe you do not have any hosted
-              listing, go to create a new one)
-            </Typography>
-          </Grid>
-        </Grid>
+              <Grid container>
+                <Grid item xs={12} align='center'>
+                  <Typography variant='h5'>{loadingMessage}</Typography>
+                  {/* <Typography variant='body1'> */}
+                  {/*  (If loading time too long, maybe you do not have any hosted */}
+                  {/*  listing, go to create a new one) */}
+                  {/* </Typography> */}
+                </Grid>
+              </Grid>
         )}
+        {/* if user has a booking */}
         {lists.length !== 0 && (
           <Grid container spacing={3}>
             {lists.map((card) => (
               <Grid item key={card.id} className={styles.item} xs={12} sm={6} md={4}>
                 <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                    sx={{
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      boxShadow: 3,
+                      borderRadius: 2,
+                      '&:hover': {
+                        boxShadow: 5,
+                        transform: 'scale(1.02)',
+                        transition: 'transform .2s ease-in-out',
+                      }
+                    }}
                 >
                   <div className={styles.root}>
                       <ImageList className={styles.imageList} cols={1}>

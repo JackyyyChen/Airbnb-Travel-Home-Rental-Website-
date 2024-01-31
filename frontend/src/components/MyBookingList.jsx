@@ -219,7 +219,18 @@ export default function MyBooking (props) {
                     {lists.map((card) => (
                         <Grid item key={card.id} xs={12} sm={6} md={4}>
                           <Card
-                              sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                              sx={{
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                boxShadow: 3,
+                                borderRadius: 2,
+                                '&:hover': {
+                                  boxShadow: 5,
+                                  transform: 'scale(1.02)',
+                                  // transition: 'transform .2s ease-in-out',
+                                }
+                              }}
                           >
                             <CardContent sx={{ flexGrow: 1 }}>
                               {/* bookingID */}
